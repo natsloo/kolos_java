@@ -70,4 +70,13 @@ public abstract class Country {
                 '}';
     }
 
+    private static class CountryColumns{
+        public final int firstColumnIndex, columnCount;
+
+        public CountryColumns(int firstColumnIndex, int columnCount) {
+            this.firstColumnIndex = firstColumnIndex;
+            this.columnCount = columnCount;
+        }
+    }
+
 }
