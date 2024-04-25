@@ -70,6 +70,20 @@ public abstract class Country {
                 '}';
     }
 
+    private static CountryColumns getCountryColumns(String firstCsvLine, String country){
+
+        String[] countryNames = firstCsvLine.split(";");
+        for(int i=1;i<countryNames.length;i++) {
+            if (countryNames[i].equals(country)) {
+                int j = 0;
+                for (; countryNames[i + j].equals(country); j++) {
+                }
+                return new CountryColumns(i,j);
+            }
+        }
+        return null;
+    }
+
     private static class CountryColumns{
         public final int firstColumnIndex, columnCount;
 
