@@ -7,7 +7,7 @@ public class Main {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        Country c = Country.fromCsv("gfrde");
+        Country c = Country.fromCsv("Canada");
         System.out.println(c.getName());
         System.out.println("\n" + c.toString());
     }

@@ -33,27 +33,20 @@ public abstract class Country {
         try {
             Scanner sCC = new Scanner(new File(confirmed_casesFilePath));
             Scanner sD = new Scanner(new File(deathsFilePath));
-            String[] countryNames = sCC.nextLine().split(";");
-            for(int i=1;i<countryNames.length;i++){
-                if(countryNames[i].equals(countryName)){
-                    String[] provinceNames = sCC.nextLine().split(";");
-                    if (provinceNames[i].equals("nan")){
-                        return new CountryWithoutProvinces(countryName);
-                    }
-                    else {
-                        List<Country> provinces = new ArrayList<>();
-                        for (int j=0;countryNames[i+j].equals(countryName);j++){
-                            provinces.add(new CountryWithoutProvinces(provinceNames[i+j]));
-                        }
-                        Country[] provinces_arr = new Country[provinces.size()];
-                        for(int k=0;k< provinces.size();k++){
-                            provinces_arr[k]= provinces.get(k);
-                        }
-                        return new CountryWithProvinces(countryName,provinces_arr);
-                    }
+            String countryNames = sCC.nextLine();
+            CountryColumns cc = getCountryColumns(countryNames,countryName);
+            String[] countries = countryNames.split(";");
+            if(cc.columnCount>1){
+                Country[] provinces_arr = new Country[cc.columnCount];
+                String[] provinceNames = sCC.nextLine().split(";");
+                for(int k=0;k<cc.columnCount;k++) {
+                    provinces_arr[k] = new CountryWithoutProvinces(provinceNames[k + cc.firstColumnIndex]);
                 }
+                return new CountryWithProvinces(countryName,provinces_arr);
+            } else if (cc.columnCount==1) {
+                return new CountryWithoutProvinces(countryName);
             }
-            throw new CountryNotFoundException(countryName);
+
 
         } catch (CountryNotFoundException e)  {
             System.err.println(e.getMessage());
@@ -70,7 +63,7 @@ public abstract class Country {
                 '}';
     }
 
-    private static CountryColumns getCountryColumns(String firstCsvLine, String country){
+    private static CountryColumns getCountryColumns(String firstCsvLine, String country) throws CountryNotFoundException {
 
         String[] countryNames = firstCsvLine.split(";");
         for(int i=1;i<countryNames.length;i++) {
@@ -81,7 +74,7 @@ public abstract class Country {
                 return new CountryColumns(i,j);
             }
         }
-        return null;
+        throw new CountryNotFoundException(country);
     }
 
     private static class CountryColumns{
