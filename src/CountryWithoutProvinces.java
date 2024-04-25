@@ -3,5 +3,4 @@ public class CountryWithoutProvinces extends Country{
         super(name);
     }
 
-
 }
