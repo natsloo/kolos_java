@@ -53,10 +53,14 @@ public abstract class Country {
                     }
                 }
             }
-            return null;
-        } catch (IOException e) {
+            throw new CountryNotFoundException(countryName);
+
+        } catch (CountryNotFoundException e)  {
+            System.err.println(e.getMessage());
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     @Override
